@@ -197,10 +197,10 @@ class PinCodeEnter extends React.PureComponent<IProps, IState> {
     const optionalConfigObject = {
       imageColor: '#e00606',
       imageErrorColor: '#ff0000',
-      sensorDescription: 'Touch sensor',
-      sensorErrorDescription: 'Failed',
+      sensorDescription: '지문 인증',
+      sensorErrorDescription: '지문 인증에 실패했습니다. 다시 시도해주세요.',
       cancelText: this.props.textCancelButtonTouchID || 'Cancel',
-      fallbackLabel: 'Show Passcode',
+      fallbackLabel: '비밀번호로 인증하기',
       unifiedErrors: false,
       passcodeFallback: true
     }
