@@ -9,7 +9,8 @@ import {
   StyleSheet,
   TextStyle,
   View,
-  ViewStyle
+  ViewStyle,
+  Platform
 } from 'react-native'
 import * as Keychain from 'react-native-keychain'
 import TouchID from 'react-native-touch-id'
@@ -106,10 +107,15 @@ class PinCodeEnter extends React.PureComponent<IProps, IState> {
 
   async componentWillMount() {
     if (!this.props.storedPin) {
+      if(Platform.OS === 'ios'){
+        const result = await AsyncStorage.getItem(this.props.pinCodeKeychainName);
+        this.keyChainResult = result || undefined;
+      }else{
       const result = await Keychain.getInternetCredentials(
         this.props.pinCodeKeychainName
       )
       this.keyChainResult = result.password || undefined
+      }
     }
   }
 
@@ -197,10 +203,10 @@ class PinCodeEnter extends React.PureComponent<IProps, IState> {
     const optionalConfigObject = {
       imageColor: '#e00606',
       imageErrorColor: '#ff0000',
-      sensorDescription: '지문 인증',
-      sensorErrorDescription: '지문 인증에 실패했습니다. 다시 시도해주세요.',
+      sensorDescription: 'Touch sensor',
+      sensorErrorDescription: 'Failed',
       cancelText: this.props.textCancelButtonTouchID || 'Cancel',
-      fallbackLabel: '비밀번호로 인증하기',
+      fallbackLabel: 'Show Passcode',
       unifiedErrors: false,
       passcodeFallback: true
     }

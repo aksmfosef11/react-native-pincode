@@ -61,8 +61,14 @@ class PinCodeEnter extends React.PureComponent {
     }
     async componentWillMount() {
         if (!this.props.storedPin) {
-            const result = await Keychain.getInternetCredentials(this.props.pinCodeKeychainName);
-            this.keyChainResult = result.password || undefined;
+            if (react_native_1.Platform.OS === 'ios') {
+                const result = await async_storage_1.default.getItem(this.props.pinCodeKeychainName);
+                this.keyChainResult = result || undefined;
+            }
+            else {
+                const result = await Keychain.getInternetCredentials(this.props.pinCodeKeychainName);
+                this.keyChainResult = result.password || undefined;
+            }
         }
     }
     componentDidMount() {

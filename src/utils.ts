@@ -1,3 +1,6 @@
+import {
+  Platform
+} from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import * as Keychain from 'react-native-keychain'
 
@@ -9,15 +12,24 @@ export enum PinResultStatus {
 }
 
 export const hasPinCode = async (serviceName: string) => {
+  if(Platform.OS === 'ios'){
+    return await AsyncStorage.getItem(serviceName);
+  }
   return await Keychain.getInternetCredentials(serviceName).then(res => {
     return !!res && !!res.password
   })
 }
 
 export const deletePinCode = async (serviceName: string) => {
+  if(Platform.OS === 'ios'){
+    return await AsyncStorage.removeItem(serviceName);
+  }
   return await Keychain.resetInternetCredentials(serviceName)
 }
 
 export const resetInternalStates = async (asyncStorageKeys: string[]) => {
+  if(Platform.OS === 'ios'){
+    return await AsyncStorage.removeItem('nagijiPin');
+  }
   return await AsyncStorage.multiRemove(asyncStorageKeys)
 }
